@@ -18,6 +18,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "fireship-io",
+      "name": "Fireship",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/46283609?v=4",
+      "profile": "https://fireship.io/",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7
