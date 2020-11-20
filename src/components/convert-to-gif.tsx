@@ -1,6 +1,7 @@
 import { fetchFile } from "@ffmpeg/ffmpeg"
 import * as React from "react"
 import { useFfmpeg } from "utils/hooks"
+import VideoPlayer from "./video-player"
 
 function ConvertToGif() {
   const { isReady, ffmpeg } = useFfmpeg({ log: true })
@@ -11,7 +12,7 @@ function ConvertToGif() {
   const convertToGif = async () => {
     setIsConverting(true)
 
-    // write the file to memory
+    // write the file to memory (MEMFS)
     ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video))
 
     // run the ffmpeg command
@@ -40,16 +41,14 @@ function ConvertToGif() {
 
   return isReady ? (
     <div className="flex flex-col justify-center align-middle">
-      {video && (
-        <div className="mx-auto m-10">
-          <video controls width="250" src={URL.createObjectURL(video)}></video>
-        </div>
-      )}
-      <input
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
-        type="file"
-        onChange={(e) => setVideo(e.target.files?.item(0))}
-      />
+      <VideoPlayer video={video} />
+      <div className="overflow-hidden m-4">
+        <input
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+          type="file"
+          onChange={(e) => setVideo(e.target.files?.item(0))}
+        />
+      </div>
 
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
