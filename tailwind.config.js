@@ -7,6 +7,10 @@ module.exports = {
   theme: {
     extend: {},
   },
-  variants: {},
-  plugins: [],
+  variants: {
+    extend: {
+      opacity: ["disabled"],
+    },
+  },
+  plugins: [require("@tailwindcss/forms")],
 }
