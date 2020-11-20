@@ -28,7 +28,7 @@ function ConvertToGif() {
         "-i",
         "test.mp4",
         "-t",
-        duration,
+        Number(duration) <= 10 ? duration : "10",
         "-ss",
         "2.0",
         "-f",
@@ -74,15 +74,15 @@ function ConvertToGif() {
               <div className="grid grid-flow-col auto-cols-max gap-4 justify-evenly">
                 <div>
                   <label
-                    htmlFor="length"
+                    htmlFor="duration"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Length
+                    Duration
                   </label>
                   <div className="mt-1 relative rounded-md shadow-sm">
                     <input
                       type="number"
-                      id="length"
+                      id="duration"
                       className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
                       placeholder="3"
                       value={duration}
