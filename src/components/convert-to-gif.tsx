@@ -14,37 +14,39 @@ function ConvertToGif() {
   const [video, setVideo] = React.useState<any>()
   const [gif, setGif] = React.useState<any>()
   const [isConverting, setIsConverting] = React.useState(false)
-  const [duration, setDuration] = React.useState(3)
+  const [duration, setDuration] = React.useState("3")
 
-  const convertToGif = async () => {
+  const convertToGif = React.useCallback(async () => {
     setIsConverting(true)
 
-    // write the file to memory (MEMFS)
-    ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video))
+    if (ffmpeg) {
+      // write the file to memory (MEMFS)
+      ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video))
 
-    // run the ffmpeg command
-    await ffmpeg.run(
-      "-i",
-      "test.mp4",
-      "-t",
-      `${duration}`,
-      "-ss",
-      "2.0",
-      "-f",
-      "gif",
-      "out.gif"
-    )
+      // run the ffmpeg command
+      await ffmpeg.run(
+        "-i",
+        "test.mp4",
+        "-t",
+        duration,
+        "-ss",
+        "2.0",
+        "-f",
+        "gif",
+        "out.gif"
+      )
 
-    // read the result
-    const data = ffmpeg.FS("readFile", "out.gif")
+      // read the result
+      const data = ffmpeg.FS("readFile", "out.gif")
 
-    // create a URL
-    const url = URL.createObjectURL(
-      new Blob([data.buffer], { type: "image/gif" })
-    )
-    setGif(url)
+      // create a URL
+      const url = URL.createObjectURL(
+        new Blob([data.buffer], { type: "image/gif" })
+      )
+      setGif(url)
+    }
     setIsConverting(false)
-  }
+  }, [duration, ffmpeg, video])
 
   return isReady ? (
     <div className="flex flex-col justify-center align-middle">
@@ -84,9 +86,7 @@ function ConvertToGif() {
                       className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
                       placeholder="3"
                       value={duration}
-                      onChange={(event) =>
-                        setDuration(Number(event.target.value))
-                      }
+                      onChange={(event) => setDuration(event.target.value)}
                       min="1"
                       max="10"
                     />
